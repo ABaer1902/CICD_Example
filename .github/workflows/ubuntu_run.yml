@@ -1,9 +1,8 @@
 name: Ubuntu Run
-
 on:
  workflow_dispatch:
 
-Jobs:
+jobs:
   ubuntu-run:
     name: Ubuntu Run
     runs-on: self-hosted
