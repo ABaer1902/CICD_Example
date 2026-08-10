@@ -1,22 +1,32 @@
-FROM ubuntu:24.04
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /src
+COPY ["AvaloniaApplication1/AvaloniaApplication1.csproj", "AvaloniaApplication1/"]
+RUN dotnet restore "AvaloniaApplication1/AvaloniaApplication1.csproj"
+COPY . .
+WORKDIR /src/AvaloniaApplication1
+RUN dotnet publish "AvaloniaApplication1.csproj" -c Release -o /app/publish \
+    --runtime linux-x64 --self-contained true
 
-ENV DEBIAN_FRONTEND=noninteractive
+FROM mcr.microsoft.com/dotnet/runtime:9.0 AS final
 
-RUN apt-get update && \
-    apt-get install -y \
-        ca-certificates \
-        wget \
-        curl \
-        git \
+# Install Avalonia dependencies and Xvfb
+RUN apt-get update && apt-get install -y \
+    libx11-6 \
+    libice6 \
+    libsm6 \
+    libfontconfig1 \
+    xvfb \
+    fonts-noto \
+    && fc-cache -fv \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN wget https://packages.microsoft.com/config/ubuntu/24.04/packages-microsoft-prod.deb \
-        -O packages-microsoft-prod.deb && \
-    dpkg -i packages-microsoft-prod.deb && \
-    rm packages-microsoft-prod.deb
+ENV DISPLAY=:99
 
-RUN apt-get update && \
-    apt-get install -y dotnet-sdk-8.0 && \
-    rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+COPY --from=build /app/publish .
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-WORKDIR /src
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["./AvaloniaApplication1"]
