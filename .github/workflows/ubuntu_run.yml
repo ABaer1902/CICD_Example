@@ -13,7 +13,7 @@ Jobs:
         uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
 
       - name: Check Docker
-          shell: powershell
+          shell: pwsh
           run: |
             if (Get-Command docker -ErrorAction SilentlyContinue) {
                 Write-Host "Docker is installed."
@@ -25,17 +25,17 @@ Jobs:
             }
 
         - name: Verify Docker daemon
-        shell: powershell
+        shell: pwsh 
         run: |
           docker info
 
         - name: Build Ubuntu builder image
-        shell: powershell
+        shell: pwsh 
         run: |
           docker build -t avalonia-builder -f Dockerfile.build .
 
         - name: Build Avalonia app in Ubuntu
-        shell: powershell
+        shell: pwsh 
         run: |
           docker run --rm `
             -v "${{ github.workspace }}:/src" `
