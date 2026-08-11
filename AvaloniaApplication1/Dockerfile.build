@@ -1,32 +1,31 @@
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-WORKDIR /src
-COPY ["AvaloniaApplication1/AvaloniaApplication1.csproj", "AvaloniaApplication1/"]
-RUN dotnet restore "AvaloniaApplication1/AvaloniaApplication1.csproj"
-COPY . .
-WORKDIR /src/AvaloniaApplication1
-RUN dotnet publish "AvaloniaApplication1.csproj" -c Release -o /app/publish \
-    --runtime linux-x64 --self-contained true
+# escape=`
 
-FROM mcr.microsoft.com/dotnet/runtime:9.0 AS final
+FROM mcr.microsoft.com/dotnet/sdk:9.0-windowsservercore-ltsc2025 AS build
 
-# Install Avalonia dependencies and Xvfb
-RUN apt-get update && apt-get install -y \
-    libx11-6 \
-    libice6 \
-    libsm6 \
-    libfontconfig1 \
-    xvfb \
-    fonts-noto \
-    && fc-cache -fv \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+WORKDIR C:\src
 
-ENV DISPLAY=:99
+# Copy project file first so restore can be cached
+COPY AvaloniaApplication1\AvaloniaApplication1.csproj .\AvaloniaApplication1\
 
-WORKDIR /app
-COPY --from=build /app/publish .
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+RUN dotnet restore .\AvaloniaApplication1\AvaloniaApplication1.csproj
 
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["./AvaloniaApplication1"]
+# Copy the rest of the source
+COPY AvaloniaApplication1 .\AvaloniaApplication1
+
+WORKDIR C:\src\AvaloniaApplication1
+
+RUN dotnet publish `
+    AvaloniaApplication1.csproj `
+    --configuration Release `
+    --runtime win-x64 `
+    --self-contained false `
+    --output C:\publish
+
+
+FROM mcr.microsoft.com/dotnet/runtime:9.0-windowsservercore-ltsc2025 AS runtime
+
+WORKDIR C:\app
+
+COPY --from=build C:\publish .
+
+ENTRYPOINT ["dotnet", "AvaloniaApplication1.dll"]
