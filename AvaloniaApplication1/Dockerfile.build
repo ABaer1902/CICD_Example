@@ -1,31 +1,26 @@
-# escape=`
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 
-FROM mcr.microsoft.com/dotnet/sdk:9.0-windowsservercore-ltsc2025 AS build
+WORKDIR /src
 
-WORKDIR C:\src
+COPY AvaloniaApplication1/AvaloniaApplication1.csproj ./AvaloniaApplication1/
 
-# Copy project file first so restore can be cached
-COPY AvaloniaApplication1\AvaloniaApplication1.csproj .\AvaloniaApplication1\
+RUN dotnet restore ./AvaloniaApplication1/AvaloniaApplication1.csproj
 
-RUN dotnet restore .\AvaloniaApplication1\AvaloniaApplication1.csproj
+COPY AvaloniaApplication1 ./AvaloniaApplication1
 
-# Copy the rest of the source
-COPY AvaloniaApplication1 .\AvaloniaApplication1
+WORKDIR /src/AvaloniaApplication1
 
-WORKDIR C:\src\AvaloniaApplication1
+RUN dotnet publish \
+    AvaloniaApplication1.csproj \
+    --configuration Release \
+    --runtime linux-x64 \
+    --self-contained false \
+    --output /publish
 
-RUN dotnet publish `
-    AvaloniaApplication1.csproj `
-    --configuration Release `
-    --runtime win-x64 `
-    --self-contained false `
-    --output C:\publish
+FROM mcr.microsoft.com/dotnet/runtime:9.0
 
+WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/runtime:9.0-windowsservercore-ltsc2025 AS runtime
-
-WORKDIR C:\app
-
-COPY --from=build C:\publish .
+COPY --from=build /publish .
 
 ENTRYPOINT ["dotnet", "AvaloniaApplication1.dll"]
