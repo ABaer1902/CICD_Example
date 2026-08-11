@@ -9,7 +9,7 @@ jobs:
 
     steps:
 
-    - name: Set up Docker
+      - name: Set up Docker
         uses: docker/setup-docker-action@v5
         with:
           daemon-config: |
