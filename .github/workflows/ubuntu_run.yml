@@ -42,4 +42,4 @@ jobs:
         uses: docker/build-push-action@v7
         with:
           push: true
-          tags: tags: abaer1902/avalonia-app:latest
+          tags: abaer1902/avalonia-app:latest
