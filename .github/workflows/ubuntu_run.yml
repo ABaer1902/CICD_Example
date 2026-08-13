@@ -43,6 +43,10 @@ jobs:
         with:
           call: check
 
+      
+      - name: Run Application
+        run: docker run --rm abaer1902/avalonia-app:latest
+
       - name: Build and push
         uses: docker/build-push-action@v7
         with:
