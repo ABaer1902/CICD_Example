@@ -18,7 +18,7 @@ RUN dotnet publish \
     -o /publish
 
 # Runtime
-FROM dhi.io/dotnet:10 AS runtime
+FROM mcr.microsoft.com/dotnet/runtime:10.0 AS runtime
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
