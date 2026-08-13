@@ -8,6 +8,7 @@ jobs:
     runs-on: self-hosted
 
     steps:
+      # Preliminary
       - name: Connect to runner
         run: echo "Connected to self-hosted runner as $USER"
 
@@ -20,6 +21,9 @@ jobs:
           username: "abaer1902"
           password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
 
+
+
+      # Set up Docker, QEMU, and Buildx
       - name: Set up Docker
         uses: docker/setup-docker-action@v5
         with:
@@ -43,23 +47,32 @@ jobs:
         with:
           call: check
 
-# Attempt to run the application in a container with a timeout of 10 seconds. If the application does not exit within this time, it will be killed and the exit
-      - name: Smoke test container
-          run: |
-            timeout 10s docker run \
-              --rm \
-              --entrypoint /usr/bin/xvfb-run \
-              abaer1902/avalonia-app:test \
-              -a dotnet AvaloniaApplication1.dll || code=$?
-
-            if [ "${code:-0}" -ne 0 ] && [ "${code:-0}" -ne 124 ]; then
-              exit "${code}"
-            fi
-
-
-# Pushing valid image to Docker Hub
-      - name: Build and load Docker image
+      - name: Load Docker image
         uses: docker/build-push-action@v7
         with:
           load: true
-          tags: abaer1902/avalonia-app:test
+          tags: abaer1902/avalonia-app:test1
+
+
+
+      # Testing the application in a container (10 second timeout)
+      - name: Smoke test container
+        run: |
+          timeout 10s docker run \
+            --rm \
+            --entrypoint /usr/bin/xvfb-run \
+            abaer1902/avalonia-app:test \
+            -a dotnet AvaloniaApplication1.dll || code=$?
+
+          if [ "${code:-0}" -ne 0 ] && [ "${code:-0}" -ne 124 ]; then
+            exit "${code}"
+          fi
+
+      - name: Build and push valid image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: true
+          tags: abaer1902/avalonia-app:latest
+
+# pass
