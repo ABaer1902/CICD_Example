@@ -58,14 +58,26 @@ jobs:
       # Testing the application in a container (10 second timeout)
       - name: Smoke test container
         run: |
-          timeout 10s docker run \
+          container_id=$(docker run \
             --rm \
             --entrypoint /usr/bin/xvfb-run \
             abaer1902/avalonia-app:test \
-            -a dotnet AvaloniaApplication1.dll || code=$?
+            -a dotnet AvaloniaApplication1.dll)
+          echo "Started container: $container_id"
+          sleep 10
 
-          if [ "${code:-0}" -ne 0 ] && [ "${code:-0}" -ne 124 ]; then
-            exit "${code}"
+          if [ "$(docker inspect -f '{{.State.Running}}' "$container_id")" = "true" ]; then
+            echo "Smoke test passed: application ran for >10 seconds."
+            docker rm -f "$container_id"
+          else
+            exit_code=$(docker inspect -f '{{.State.ExitCode}}' "$container_id")
+
+            echo "Smoke test failed. Container exited with code $exit_code."
+            echo "Container logs:"
+            docker logs "$container_id"
+
+            docker rm "$container_id"
+            exit "$exit_code"
           fi
 
       - name: Build and push valid image
