@@ -53,7 +53,8 @@ jobs:
           load: true
           tags: abaer1902/avalonia-app:test
 
-
+      - name: Open XVFB Display (for headless)
+        run: xvfb-run
 
       # Testing the application in a container (10 second timeout)
       - name: Smoke test container
