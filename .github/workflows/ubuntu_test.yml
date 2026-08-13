@@ -50,11 +50,10 @@ jobs:
       - name: Load Docker image
         uses: docker/build-push-action@v7
         with:
+          context: .
           load: true
           tags: abaer1902/avalonia-app:test
 
-      - name: Open XVFB Display (for headless)
-        run: xvfb-run
 
       # Testing the application in a container (10 second timeout)
       - name: Smoke test container
