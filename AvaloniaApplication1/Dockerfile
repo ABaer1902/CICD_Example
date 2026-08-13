@@ -15,3 +15,11 @@ RUN dotnet publish \
     -r linux-x64 \
     --self-contained false \
     -o /publish
+
+FROM dhi.io/dotnet:10 AS runtime
+
+WORKDIR /app
+
+COPY --from=build /publish .
+
+ENTRYPOINT ["dotnet", "AvaloniaApplication1.dll"]
