@@ -58,8 +58,7 @@ jobs:
       # Testing the application in a container (10 second timeout)
       - name: Smoke test container
         run: |
-          container_id=$(docker run \
-            --rm \
+          container_id=$(docker run -d \
             --entrypoint /usr/bin/xvfb-run \
             abaer1902/avalonia-app:test \
             -a dotnet AvaloniaApplication1.dll)
