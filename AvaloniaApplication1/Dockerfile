@@ -1,11 +1,17 @@
-# Use the .NET SDK image to build the app
-FROM dhi.io/dotnet:10-sdk AS build AS build
-WORKDIR /src
-COPY . .
-RUN dotnet publish -c Release -o /app
+# syntax=docker/dockerfile:1
 
-# Use the .NET runtime image for the final container
-FROM dhi.io/dotnet:10-sdk AS build AS final
-WORKDIR /app
-COPY --from=build /app .
-ENTRYPOINT ["dotnet", "AvaloniaApplication1.dll"]
+FROM dhi.io/dotnet:10-sdk AS build
+
+WORKDIR /src
+
+COPY . .
+
+RUN dotnet restore
+RUN dotnet build -c Release --no-restore
+RUN dotnet test -c Release --no-build
+
+RUN dotnet publish \
+    -c Release \
+    -r linux-x64 \
+    --self-contained false \
+    -o /publish

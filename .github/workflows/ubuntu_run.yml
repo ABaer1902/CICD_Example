@@ -8,6 +8,8 @@ jobs:
     runs-on: self-hosted
 
     steps:
+      - name: Connect to runner
+        run: echo "Connected to self-hosted runner as $USER"
 
       - name: Login to Docker Hub
         uses: docker/login-action@v4
