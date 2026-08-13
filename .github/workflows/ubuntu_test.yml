@@ -51,7 +51,7 @@ jobs:
         uses: docker/build-push-action@v7
         with:
           load: true
-          tags: abaer1902/avalonia-app:test1
+          tags: abaer1902/avalonia-app:test
 
 
 
