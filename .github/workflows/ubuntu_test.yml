@@ -43,12 +43,23 @@ jobs:
         with:
           call: check
 
-      
-      - name: Run Application
-        run: docker run --rm abaer1902/avalonia-app:latest
+# Attempt to run the application in a container with a timeout of 10 seconds. If the application does not exit within this time, it will be killed and the exit
+      - name: Smoke test container
+          run: |
+            timeout 10s docker run \
+              --rm \
+              --entrypoint /usr/bin/xvfb-run \
+              abaer1902/avalonia-app:test \
+              -a dotnet AvaloniaApplication1.dll || code=$?
 
-      - name: Build and push
+            if [ "${code:-0}" -ne 0 ] && [ "${code:-0}" -ne 124 ]; then
+              exit "${code}"
+            fi
+
+
+# Pushing valid image to Docker Hub
+      - name: Build and load Docker image
         uses: docker/build-push-action@v7
         with:
-          push: true
-          tags: abaer1902/avalonia-app:latest
+          load: true
+          tags: abaer1902/avalonia-app:test
