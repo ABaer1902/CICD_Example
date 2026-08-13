@@ -4,7 +4,7 @@ on:
 
 jobs:
   ubuntu-run:
-    name: Ubuntu Run
+    name: Ubuntu Test
     runs-on: self-hosted
 
     steps:
