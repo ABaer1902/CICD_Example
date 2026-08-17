@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
 using AvaloniaApplication1.Services;
+using System;
 
 namespace AvaloniaApplication1.Views;
 
@@ -12,6 +13,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        //throw new InvalidOperationException("Intentional runtime failure for CI/CD demo.");
     }
 
     private async void AddEntry_Click(object? sender, RoutedEventArgs e)        // Add an Entry to the database when button is clicked
