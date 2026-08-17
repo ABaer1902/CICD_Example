@@ -38,7 +38,7 @@ To do this:
 6. run `docker images`. You should see avalonia-app-test.tar listed as a possible image
 7. run `docker run avalonia-app-test.tar` to run the container
 The replicated container will be the **exact environment** which caused the crash on the remote machine. All artifacts made have a current lifespan of 7 days before they are removed.
-## Basic Unit Testing
+### Basic Unit Testing
 Before running the integration tests, *Ubuntu_Test* will compile the code, run a basic coverage test run an established set of unit tests. The tests provided are very minimal as they are a stand-in for more complicated testing in the future.
 
 
