@@ -60,37 +60,39 @@ jobs:
 
       # Testing the application in a container (10 second timeout)
       - name: Smoke test container
+        shell: bash
         run: |
-          container_id=$(docker run -d \
+          set +e
+
+          timeout 10s docker run --rm \
             --entrypoint /usr/bin/xvfb-run \
             abaer1902/avalonia-app:test \
-            -a dotnet AvaloniaApplication1.dll)
-          echo "Started container: $container_id"
-          sleep 10
+            -a dotnet AvaloniaApplication1.dll
 
-          echo "=== Container processes ==="
-          docker top "$container_id"
+          exit_code=$?
 
-          echo "=== Container logs ==="
-          docker logs "$container_id"
+          echo
+          echo "================================="
+          echo "Smoke test result"
+          echo "Exit code: $exit_code"
+          echo "================================="
 
-          # First verify the container itself is alive
-          if [ "$(docker inspect -f '{{.State.Running}}' "$container_id")" != "true" ]; then
-            echo "FAIL: Container terminated."
-            docker rm "$container_id" || true
-            exit 1
-          fi
+          case "$exit_code" in
+            124)
+              echo "PASS: application remained alive for 10 seconds."
+              exit 0
+              ;;
 
-          # Then verify the actual .NET application is alive
-          if ! docker top "$container_id" -eo args | grep -q '[d]otnet AvaloniaApplication1.dll'; then
-            echo "FAIL: Container is running, but the Avalonia application is not."
-            docker rm -f "$container_id"
-            exit 1
-          fi
+            0)
+              echo "FAIL: application exited normally before 10 seconds."
+              exit 1
+              ;;
 
-          echo "PASS: Avalonia application remained running for 10 seconds."
-
-          docker rm -f "$container_id"
+            *)
+              echo "FAIL: application crashed or exited with code $exit_code."
+              exit 1
+              ;;
+          esac
 
       - name: Save Docker image if job failed
         if: ${{ failure() }}
