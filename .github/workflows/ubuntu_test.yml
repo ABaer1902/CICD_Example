@@ -64,22 +64,18 @@ jobs:
         run: |
           set +e
 
-          timeout 10s docker run --rm \
-            --entrypoint /usr/bin/xvfb-run \
+          docker run --rm \
+            --entrypoint /bin/bash \
             abaer1902/avalonia-app:test \
-            -a dotnet AvaloniaApplication1.dll
+            -c 'timeout --foreground -k 2s 10s xvfb-run -a dotnet AvaloniaApplication1.dll'
 
           exit_code=$?
 
-          echo
-          echo "================================="
-          echo "Smoke test result"
-          echo "Exit code: $exit_code"
-          echo "================================="
+          echo "Smoke test exit code: $exit_code"
 
           case "$exit_code" in
             124)
-              echo "PASS: application remained alive for 10 seconds."
+              echo "PASS: application remained running for at least 10 seconds."
               exit 0
               ;;
 
