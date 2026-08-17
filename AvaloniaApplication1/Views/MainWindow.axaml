@@ -15,8 +15,27 @@
         <vm:MainViewModel />
     </Design.DataContext>
 
-    <TextBox Text="{Binding Greeting}"
-             HorizontalAlignment="Center"
-             VerticalAlignment="Center" />
+    <StackPanel Margin="30" Spacing="15">
+
+        <TextBlock
+            Text="Sample Avalonia App"
+            FontSize="24"/>
+
+        <Button
+            Content="Add Entry"
+            Click="AddEntry_Click"
+            HorizontalAlignment="Left"/>
+
+        <Button
+            Content="Query Database"
+            Click="QueryDatabase_Click"
+            HorizontalAlignment="Left"/>
+
+        <TextBlock
+            x:Name="ResultText"
+            Text="Database has not been queried yet."
+            FontSize="16"/>
+
+    </StackPanel>
 
 </Window>
