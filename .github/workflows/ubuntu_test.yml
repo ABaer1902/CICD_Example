@@ -57,13 +57,6 @@ jobs:
           load: true
           tags: abaer1902/avalonia-app:test
 
-      - name: Build Docker image
-        run: |
-          docker build \
-            --no-cache \
-            --progress=plain \
-            -t abaer1902/avalonia-app:test \
-            .
 
       # Testing the application in a container (10 second timeout)
       - name: Smoke test container
