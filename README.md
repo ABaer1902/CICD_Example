@@ -46,7 +46,7 @@ Before running the integration tests, *Ubuntu_Test* will compile the code, run a
 For more information about Adam Baer (this projects developer).
 - Please reach out at ABaer1902@gmail.com
 - Visit [Github](https://github.com/ABaer1902)
-- Visit [LinkedIn](www.linkedin.com/in/adam-baer-3a4bb4279)
+- Visit www.linkedin.com/in/adam-baer-3a4bb4279
 
 ## License & Copyright
 
