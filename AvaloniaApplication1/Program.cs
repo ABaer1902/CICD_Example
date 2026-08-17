@@ -13,7 +13,7 @@ sealed class Program
     {
         Console.WriteLine("CI DEMO: new Program.cs is running");
 
-        throw new Exception("CI DEMO RUNTIME FAILURE");
+        Environment.FailFast("Intentional CI runtime failure");
 
         BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);

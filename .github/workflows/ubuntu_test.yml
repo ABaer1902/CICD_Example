@@ -5,7 +5,10 @@ on:
 jobs:
   ubuntu-run:
     name: Ubuntu Test
-    runs-on: self-hosted
+    runs-on:
+      - self-hosted
+      - linux
+      - x64
 
     steps:
       # Preliminary
@@ -72,30 +75,29 @@ jobs:
           echo "Started container: $container_id"
           sleep 10
 
-          echo "=== Container status ==="
-          docker inspect "$container_id" \
-            --format='Status={{.State.Status}} Running={{.State.Running}} ExitCode={{.State.ExitCode}}'
+          echo "=== Container processes ==="
+          docker top "$container_id"
 
           echo "=== Container logs ==="
           docker logs "$container_id"
 
-          if [ "$(docker inspect -f '{{.State.Running}}' "$container_id")" = "true" ]; then
-            echo "Smoke test passed: application ran for >10 seconds."
-            docker rm -f "$container_id"
-          else
-            exit_code=$(docker inspect -f '{{.State.ExitCode}}' "$container_id")
-
-            echo "Smoke test failed. Container exited with code $exit_code."
-            echo "Container logs:"
-            docker logs "$container_id"
-
-            docker rm "$container_id"
-            if [ "$exit_code" -eq 0 ]; then
-                exit 1
-            else
-                exit "$exit_code"
-            fi
+          # First verify the container itself is alive
+          if [ "$(docker inspect -f '{{.State.Running}}' "$container_id")" != "true" ]; then
+            echo "FAIL: Container terminated."
+            docker rm "$container_id" || true
+            exit 1
           fi
+
+          # Then verify the actual .NET application is alive
+          if ! docker top "$container_id" -eo args | grep -q '[d]otnet AvaloniaApplication1.dll'; then
+            echo "FAIL: Container is running, but the Avalonia application is not."
+            docker rm -f "$container_id"
+            exit 1
+          fi
+
+          echo "PASS: Avalonia application remained running for 10 seconds."
+
+          docker rm -f "$container_id"
 
       - name: Save Docker image if job failed
         if: ${{ failure() }}
