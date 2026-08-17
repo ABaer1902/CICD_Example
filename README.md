@@ -7,7 +7,7 @@ The model utilizes:
 - Bash
 - Azure VMs
 ### Project Overview
-![Demo Implementation Overview](<img width="1695" height="1003" alt="CI_CD Diagram - Page 1" src="https://github.com/user-attachments/assets/121c8f4b-69fc-4440-9f93-a4e1bf625ef2" />
+(<img width="1695" height="1003" alt="CI_CD Diagram - Page 1" src="https://github.com/user-attachments/assets/121c8f4b-69fc-4440-9f93-a4e1bf625ef2" />
 )
 ### Growth Overview
 ![Full CI/CD Overview](<img width="4575" height="2119" alt="CI_CD Diagram" src="https://github.com/user-attachments/assets/7ebb4104-6995-4e50-8cd5-cc1f5f8aad78" />
