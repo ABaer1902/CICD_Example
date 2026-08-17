@@ -12,10 +12,10 @@ The model utilizes:
 ### Growth Overview
 <img width="2700" height="1000" alt="CI_CD Diagram" src="https://github.com/user-attachments/assets/7ebb4104-6995-4e50-8cd5-cc1f5f8aad78" />
 The Full CI/CD pipeline design is meant to establish 4 main points of validation:
-- Source (How engineers are allowed to push and pull code.)
-- Build (The setup and install of the environment and dependencies for the app)
-- Test (Any validation that must occur at runtime [ex. Leak tests, UI validation... etc])
-- Release (The process at which delivering the product to customers is automated or protected)
+1. Source- How engineers are allowed to push and pull code.
+2. Build- The setup and install of the environment and dependencies for the app
+3. Test- Any validation that must occur at runtime (ex. Leak tests, UI validation... etc)
+4. Release- The process at which delivering the product to customers is automated or protected
 ### Application Overview
 This application labeled *AvaloniaApplication1* is the application that is tested throughout this CI/CD example. It is an extremely basic example of an Avalonia app with 3 features.
 - A button that adds an entry to a local database using SQLite
