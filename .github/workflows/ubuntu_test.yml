@@ -72,6 +72,13 @@ jobs:
           echo "Started container: $container_id"
           sleep 10
 
+          echo "=== Container status ==="
+          docker inspect "$container_id" \
+            --format='Status={{.State.Status}} Running={{.State.Running}} ExitCode={{.State.ExitCode}}'
+
+          echo "=== Container logs ==="
+          docker logs "$container_id"
+
           if [ "$(docker inspect -f '{{.State.Running}}' "$container_id")" = "true" ]; then
             echo "Smoke test passed: application ran for >10 seconds."
             docker rm -f "$container_id"
@@ -83,7 +90,11 @@ jobs:
             docker logs "$container_id"
 
             docker rm "$container_id"
-            exit "$exit_code"
+            if [ "$exit_code" -eq 0 ]; then
+                exit 1
+            else
+                exit "$exit_code"
+            fi
           fi
 
       - name: Save Docker image if job failed
