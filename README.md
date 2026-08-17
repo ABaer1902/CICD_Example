@@ -7,10 +7,10 @@ The model utilizes:
 - Bash
 - Azure VMs
 ### Project Overview
-![Integration Test Overview]<img width="1695" height="1003" alt="CI_CD Diagram - Page 1" src="https://github.com/user-attachments/assets/121c8f4b-69fc-4440-9f93-a4e1bf625ef2" />
+<img width="850" height="500" alt="CI_CD Diagram - Page 1" src="https://github.com/user-attachments/assets/121c8f4b-69fc-4440-9f93-a4e1bf625ef2" />
 
 ### Growth Overview
-![Full CI/CD Overview](<img width="4575" height="2119" alt="CI_CD Diagram" src="https://github.com/user-attachments/assets/7ebb4104-6995-4e50-8cd5-cc1f5f8aad78" />
+![Full CI/CD Overview](<img width="2700" height="1000" alt="CI_CD Diagram" src="https://github.com/user-attachments/assets/7ebb4104-6995-4e50-8cd5-cc1f5f8aad78" />
 )
 The Full CI/CD pipeline design is meant to establish 4 main points of validation.
 - Source- How engineers are allowed to push and pull code.
