@@ -58,6 +58,7 @@ jobs:
           set +e
 
           docker run --rm \
+            --user "$(id -u):$(id -g)" \
             --entrypoint /bin/bash \
             abaer1902/avalonia-runtime:latest \
             -c 'timeout --foreground -k 2s 10s xvfb-run -a dotnet AvaloniaApplication1.dll'
@@ -129,4 +130,18 @@ jobs:
         run: |
           docker image rm abaer1902/avalonia-runtime:latest || true
           docker image rm abaer1902/avalonia-build:latest || true
-          
+      
+
+
+
+      - name: Check workspace ownership
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          echo "Runner identity:"
+          id
+
+          echo "Generated .NET directories:"
+          find "$GITHUB_WORKSPACE" \
+            \( -path "*/bin" -o -path "*/bin/Release" -o -path "*/obj" \) \
+            -exec ls -ld {} \; 2>/dev/null || true
