@@ -1,35 +1,22 @@
 # syntax=docker/dockerfile:1
 
+# Build
+FROM dhi.io/dotnet:10-sdk AS build
 
-# Test / Build environment      'test'
-FROM dhi.io/dotnet:10-sdk AS test
-
-WORKDIR /workspace
+WORKDIR /src
 
 COPY . .
 
 RUN dotnet restore
-
-RUN dotnet build \
-    -c Release \
-    --no-restore
-
-
-
-# Publish application           'publish'
-FROM test AS publish
+RUN dotnet build -c Release --no-restore
 
 RUN dotnet publish \
-    AvaloniaApplication1/AvaloniaApplication1.csproj \
     -c Release \
     -r linux-x64 \
     --self-contained false \
-    --no-restore \
     -o /publish
 
-
-
-# Runtime application           'runtime'
+# Runtime
 FROM mcr.microsoft.com/dotnet/runtime:10.0 AS runtime
 
 RUN apt-get update && \
@@ -43,6 +30,6 @@ RUN apt-get update && \
 
 WORKDIR /app
 
-COPY --from=publish /publish .
+COPY --from=build /publish .
 
 ENTRYPOINT ["dotnet", "AvaloniaApplication1.dll"]
