@@ -1,0 +1,13 @@
+name: Publish Runtime Image
+description: Tag and publish the validated Avalonia runtime image
+
+runs:
+  using: composite
+
+
+    steps:
+      # Preliminary
+      - name: Preliminary Docker Work
+        uses: ./.github/workflows/dockerPrelimWork.yml
+
+      # Create build image and push to Docker Hub
