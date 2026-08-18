@@ -1,13 +1,57 @@
 name: Publish Runtime Image
-description: Tag and publish the validated Avalonia runtime image
 
-runs:
-  using: composite
+on:
+  workflow_dispatch:
+
+jobs:
+  publish-runtime:
+    name: Publish a valid build image for testing and runtime
+    runs-on:
+      - self-hosted
+      - linux
 
 
     steps:
       # Preliminary
-      - name: Preliminary Docker Work
-        uses: ./.github/workflows/dockerPrelimWork.yml
+      - name: Connect to runner
+        run: echo "Connected to self-hosted runner as $USER"
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: abaer1902
+          password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
+
+      # Docker setup
+      - name: Verify Docker
+        run: |
+          docker version
+          docker info
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Validate Dockerfile
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          call: check
 
       # Create build image and push to Docker Hub
+      - name: Build testing image
+        run: |
+          docker build \
+            --target build \
+            -t abaer1902/avalonia-build:latest \
+            .
+
+      - name: Publish build image
+        if: ${{ success() }}
+        run: |
+          docker push abaer1902/avalonia-build:latest
