@@ -10,7 +10,7 @@ The model utilizes:
 The following Github Actions are sourced at `./github/workflows/`
 | Action                 | Description            |
 | ---------------------- | ---------------------- |
-| Docker Unit Tests      | Run unit tests referencing the test suite built in `Tests` on the latest build container published to docker (`avalonia-build:latest`). Produces a txt file artifact of the results (Can also be viewed on github). |
+| Docker Unit Tests      | Run unit tests referencing the test suite built in `Tests` on the latest build container published to docker (`avalonia-build:latest`). Produces a trx file artifact of the results (Can also be viewed on github under the *Run unit tests in Docker* step). |
 | Ubuntu Test            | Using the latest code, build the app on our current runtime build and smoke-test the application. On failure, produce an artifact of the failed build. On success, update the latest build images on docker. |
 | Publish Build Image    | Create the .NET sdk build image for the application and publish it to docker called `avalonia-build:latest` |
 | Publish Runtime Image  | Create the .NET runtime image for the application and publish it to docker called `avalonia-app:latest` |
