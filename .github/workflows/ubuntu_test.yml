@@ -1,6 +1,7 @@
 name: Ubuntu Test
+
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   ubuntu-run:
@@ -21,12 +22,10 @@ jobs:
       - name: Login to Docker Hub
         uses: docker/login-action@v4
         with:
-          username: "abaer1902"
+          username: abaer1902
           password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
 
-
-
-      # Set up Docker, QEMU, and Buildx
+      # Docker setup
       - name: Set up Docker
         uses: docker/setup-docker-action@v5
         with:
@@ -37,28 +36,28 @@ jobs:
                 "containerd-snapshotter": true
               }
             }
-          
-      -
-        name: Set up QEMU
+
+      - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
 
-      - name: Validate build configuration
-        uses: docker/build-push-action@v7
-        with:
-          call: check
-
-      - name: Load Docker image
+      - name: Validate Dockerfile
         uses: docker/build-push-action@v7
         with:
           context: .
-          load: true
-          tags: abaer1902/avalonia-app:test
+          call: check
 
+      # Build runtime application image
+      - name: Build runtime image
+        run: |
+          docker build \
+            --target runtime \
+            -t abaer1902/avalonia-app:test \
+            .
 
-      # Testing the application in a container (10 second timeout)
+      # Smoke test runtime image
       - name: Smoke test container
         shell: bash
         run: |
@@ -90,6 +89,7 @@ jobs:
               ;;
           esac
 
+      # Save failed runtime image
       - name: Save Docker image if job failed
         if: ${{ failure() }}
         shell: bash
@@ -115,11 +115,32 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
 
-      - name: Build and push valid image
-        uses: docker/build-push-action@v7
-        with:
-          context: .
-          push: true
-          tags: abaer1902/avalonia-app:latest
+      # Push exact runtime image that passed
+      - name: Push validated runtime image
+        if: ${{ success() }}
+        shell: bash
+        run: |
+          docker tag \
+            abaer1902/avalonia-app:test \
+            abaer1902/avalonia-app:latest
 
-# pass
+          docker push \
+            abaer1902/avalonia-app:latest
+
+      # Build reusable SDK test-runner image
+      - name: Build test runner image
+        if: ${{ success() }}
+        shell: bash
+        run: |
+          docker build \
+            --target test \
+            -t abaer1902/avalonia-test-runner:latest \
+            .
+
+      # Push reusable SDK test-runner image that passed
+      - name: Push test runner image
+        if: ${{ success() }}
+        shell: bash
+        run: |
+          docker push \
+            abaer1902/avalonia-test-runner:latest
