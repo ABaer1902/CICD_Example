@@ -98,12 +98,12 @@ jobs:
         run: |
           mkdir -p artifacts
 
-          if docker image inspect abaer1902/abaer1902/avalonia-runtime:latest >/dev/null 2>&1; then
+          if docker image inspect abaer1902/avalonia-runtime:latest >/dev/null 2>&1; then
             echo "Docker image exists. Saving image artifact."
 
             docker save \
               -o artifacts/avalonia-app-test.tar \
-              abaer1902/abaer1902/avalonia-runtime:latest
+              abaer1902/avalonia-runtime:latest
           else
             echo "Image does not exist; skipping."
           fi
@@ -123,7 +123,7 @@ jobs:
         shell: bash
         run: |
           docker tag \
-            abaer1902/abaer1902/avalonia-runtime:latest \
+            abaer1902/avalonia-runtime:latest \
             abaer1902/avalonia-app:latest
 
           docker push \
