@@ -1,20 +1,25 @@
 using AvaloniaApplication1.Data;
 using AvaloniaApplication1.Models;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace AvaloniaApplication1.Services;
 
 public class ClientService
 {
-    // Add a tuple to the database (always the ssame aside from CreatedAt)
-    public async Task<Client> AddClientAsync( string firstName, string lastName, string email)
-    {
-        using var db = new AppDbContext();
+    private readonly AppDbContext _context;
 
+    public ClientService(AppDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<Client> AddClientAsync(
+        string firstName,
+        string lastName,
+        string email)
+    {
         var client = new Client
         {
             FirstName = firstName,
@@ -23,18 +28,15 @@ public class ClientService
             CreatedAt = DateTime.Now
         };
 
-        db.Clients.Add(client);
+        _context.Clients.Add(client);
 
-        await db.SaveChangesAsync();
+        await _context.SaveChangesAsync();
 
         return client;
     }
 
-    // Query the database for the number of clients
     public async Task<int> GetClientCountAsync()
     {
-        using var db = new AppDbContext();
-
-        return await db.Clients.CountAsync();
+        return await _context.Clients.CountAsync();
     }
 }
