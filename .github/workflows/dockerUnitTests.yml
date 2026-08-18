@@ -1,0 +1,47 @@
+name: Docker Unit Tests
+on:
+ workflow_dispatch:
+
+jobs:
+  ubuntu-run:
+    name: Run Unit Tests on latest docker image
+    runs-on:
+      - self-hosted
+      - linux
+      - x64
+
+    steps:
+      # Preliminary
+      - name: Connect to runner
+        run: echo "Connected to self-hosted runner as $USER"
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Pull latest runner image
+      - name: Pull runner image
+        run: |
+          docker pull abaer1902/avalonia-app:latest
+
+      # Run Unit Tests
+      - name: Run unit tests in Docker
+        run: |
+          docker run --rm \
+            -v "$PWD:/workspace" \
+            -w /workspace \
+            abaer1902/avalonia-app:latest \
+            dotnet test Tests/UnitTests/UnitTests.csproj \
+              --configuration Release \
+              --logger "trx;LogFileName=unit-tests.trx" \
+              --results-directory TestResults/Unit
+
+      - name: Upload unit test results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-results-${{ github.run_number }}
+          path: TestResults/Unit
+          if-no-files-found: ignore
+          retention-days: 7
+
+# pass
