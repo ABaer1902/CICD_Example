@@ -58,7 +58,6 @@ jobs:
           set +e
 
           docker run --rm \
-            --user "$(id -u):$(id -g)" \
             --entrypoint /bin/bash \
             abaer1902/avalonia-runtime:latest \
             -c 'timeout --foreground -k 2s 10s xvfb-run -a dotnet AvaloniaApplication1.dll'
