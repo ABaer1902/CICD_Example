@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
 using AvaloniaApplication1.Services;
+using AvaloniaApplication1.ViewModels;
 using System;
 
 namespace AvaloniaApplication1.Views;
@@ -28,6 +29,13 @@ public partial class MainWindow : Window
     {
         var count = await _clientService.GetClientCountAsync();
 
+        // Update text on result screen
         ResultText.Text = $"There are {count} clients in the database.";
+
+        // Update the number of entries in the ViewModel
+        if (this.DataContext is MainViewModel vm)
+        {
+            vm.nEntries = count;  
+        }
     }
 }
