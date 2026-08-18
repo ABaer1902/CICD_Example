@@ -5,5 +5,5 @@ namespace AvaloniaApplication1.ViewModels;
 public partial class MainViewModel : ViewModelBase
 {
     [ObservableProperty]
-    public partial string Greeting { get; set; } = "Welcome to Avalonia!";
+    public partial int nEntries { get; set; }  = 0;
 }
