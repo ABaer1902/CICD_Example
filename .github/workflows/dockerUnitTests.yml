@@ -18,6 +18,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Login to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: abaer1902
+          password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
+
       # Pull latest runner image
       - name: Pull runner image
         run: |
