@@ -26,16 +26,10 @@ jobs:
           password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
 
       # Docker setup
-      - name: Set up Docker
-        uses: docker/setup-docker-action@v5
-        with:
-          daemon-config: |
-            {
-              "debug": true,
-              "features": {
-                "containerd-snapshotter": true
-              }
-            }
+      - name: Verify Docker
+        run: |
+          docker version
+          docker info
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
