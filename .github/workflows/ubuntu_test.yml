@@ -58,6 +58,24 @@ jobs:
           tags: abaer1902/avalonia-app:test
 
 
+      # Unit tests
+      - name: Run unit tests
+        run: |
+          dotnet test \
+            tests/AvaloniaApplication1.UnitTests/AvaloniaApplication1.UnitTests.csproj \
+            --configuration Release \
+            --logger "trx;LogFileName=unit-tests.trx" \
+            --results-directory TestResults/Unit
+
+      # Avalonia headless UI tests
+      - name: Run UI tests
+        run: |
+          dotnet test \
+            tests/AvaloniaApplication1.HeadlessTests/AvaloniaApplication1.HeadlessTests.csproj \
+            --configuration Release \
+            --logger "trx;LogFileName=ui-tests.trx" \
+            --results-directory TestResults/UI
+
       # Testing the application in a container (10 second timeout)
       - name: Smoke test container
         shell: bash
