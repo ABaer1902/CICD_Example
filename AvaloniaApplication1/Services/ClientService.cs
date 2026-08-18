@@ -10,20 +10,8 @@ namespace AvaloniaApplication1.Services;
 
 public class ClientService
 {
-    public async Task<List<Client>> GetClientsAsync()
-    {
-        using var db = new AppDbContext();
-
-        return await db.Clients
-            .OrderBy(c => c.LastName)
-            .ThenBy(c => c.FirstName)
-            .ToListAsync();
-    }
-
-    public async Task<Client> AddClientAsync(
-        string firstName,
-        string lastName,
-        string email)
+    // Add a tuple to the database (always the ssame aside from CreatedAt)
+    public async Task<Client> AddClientAsync( string firstName, string lastName, string email)
     {
         using var db = new AppDbContext();
 
@@ -41,6 +29,8 @@ public class ClientService
 
         return client;
     }
+
+    // Query the database for the number of clients
     public async Task<int> GetClientCountAsync()
     {
         using var db = new AppDbContext();
