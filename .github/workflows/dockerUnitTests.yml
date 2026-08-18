@@ -3,7 +3,7 @@ on:
  workflow_dispatch:
 
 jobs:
-  ubuntu-run:
+  dockerUnitTests:
     name: Run Unit Tests on latest docker image
     runs-on:
       - self-hosted
