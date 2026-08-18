@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
 using AvaloniaApplication1.Services;
+using AvaloniaApplication1.Data;
 using AvaloniaApplication1.ViewModels;
 using System;
 
@@ -9,11 +10,14 @@ namespace AvaloniaApplication1.Views;
 public partial class MainWindow : Window
 {
     // isntance of the ClientService class to handle database operations
-    private readonly ClientService _clientService = new();
+    private readonly ClientService _clientService;
 
     public MainWindow()
     {
         InitializeComponent();
+
+        var context = new AppDbContext();
+        _clientService = new ClientService(context);
     }
 
     private async void AddEntry_Click(object? sender, RoutedEventArgs e)        // Add an Entry to the database when button is clicked
