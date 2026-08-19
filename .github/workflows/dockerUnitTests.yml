@@ -1,6 +1,7 @@
 name: Docker Unit Tests
+
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   dockerUnitTests:
@@ -11,7 +12,6 @@ jobs:
       - x64
 
     steps:
-      # Preliminary
       - name: Connect to runner
         run: echo "Connected to self-hosted runner as $USER"
 
@@ -24,12 +24,10 @@ jobs:
           username: abaer1902
           password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
 
-      # Pull latest runner image
       - name: Pull runner image
         run: |
-          docker pull abaer1902/avalonia-app:latest
+          docker pull abaer1902/avalonia-build:latest
 
-      # Run Unit Tests
       - name: Run unit tests in Docker
         run: |
           docker run --rm \
@@ -50,5 +48,3 @@ jobs:
           path: TestResults/Unit
           if-no-files-found: ignore
           retention-days: 7
-
-# pass
