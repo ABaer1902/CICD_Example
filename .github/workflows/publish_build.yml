@@ -5,7 +5,7 @@ on:
 
 jobs:
   publish-build:
-    name: Publish a valid build image for testing and runtime
+    name: Publish a valid build image for testing
     runs-on:
       - self-hosted
       - linux
