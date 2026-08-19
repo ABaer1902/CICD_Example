@@ -18,6 +18,8 @@ public partial class MainWindow : Window
 
         var context = new AppDbContext();
         _clientService = new ClientService(context);
+
+        throw new InvalidOperationException("Intentional runtime failure for CI/CD demo.");
     }
 
     private async void AddEntry_Click(object? sender, RoutedEventArgs e)        // Add an Entry to the database when button is clicked
