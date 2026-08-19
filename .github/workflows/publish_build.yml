@@ -1,10 +1,10 @@
-name: Publish Runtime Image
+name: Publish Build Image
 
 on:
   workflow_dispatch:
 
 jobs:
-  publish-runtime:
+  publish-build:
     name: Publish a valid build image for testing and runtime
     runs-on:
       - self-hosted
