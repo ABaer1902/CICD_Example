@@ -56,3 +56,21 @@ jobs:
         run: |
           docker push abaer1902/avalonia-build:latest
 
+
+      # Cleanup
+      - name: Clean build resources
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          echo "=== Docker usage before cleanup ==="
+          docker system df || true
+
+          # Clean docker resources after upload
+          docker image rm -f abaer1902/avalonia-build:latest 2>/dev/null || true
+          docker container prune -f || true
+          docker image prune -f || true
+          docker builder prune -f || true
+
+          echo "=== Docker usage after cleanup ==="
+          docker system df || true
+

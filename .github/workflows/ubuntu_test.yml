@@ -127,7 +127,20 @@ jobs:
       - name: Clean temporary Docker resources
         if: ${{ always() }}
         run: |
-          docker image rm abaer1902/avalonia-runtime:latest || true
-          docker image rm abaer1902/avalonia-build:latest || true
+          echo "=== Docker usage before cleanup ==="
+          docker system df || true
+
+          # Clean docker resources after upload
+          docker image rm -f abaer1902/avalonia-runtime:latest 2>/dev/null || true
+          docker container prune -f || true
+          docker image prune -f || true
+          docker builder prune -f || true
+
+          # Remove artifact locally after it is uploaded
+          rm -f artifacts/avalonia-app-test.tar
+          rmdir artifacts 2>/dev/null || true
+
+          echo "=== Docker usage after cleanup ==="
+          docker system df || true
       
 
