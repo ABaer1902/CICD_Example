@@ -15,8 +15,7 @@ The following Github Actions are sourced at `./github/workflows/`
 | Publish Build Image    | Create the .NET sdk build image for the application and publish it to docker called `avalonia-build:latest` |
 
 ### Simplified Project Overview
-<img width="850" height="500" alt="CI_CD Diagram - Page 1" src="https://github.com/user-attachments/assets/41217ed9-c42e-4fc3-b877-a99537d5f066" />
-" />
+<img width="2700" height="1000" alt="CI_CD Demo Diagram" src="https://github.com/user-attachments/assets/41217ed9-c42e-4fc3-b877-a99537d5f066" />
 
 ### Growth Overview
 The Full CI/CD pipeline design is meant to establish 4 main points of validation:
