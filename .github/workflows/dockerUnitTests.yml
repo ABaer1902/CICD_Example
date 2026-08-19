@@ -30,8 +30,13 @@ jobs:
 
       - name: Run unit tests in Docker
         run: |
+          mkdir -p "$PWD/.container-home"
+
           docker run --rm \
             --user "$(id -u):$(id -g)" \
+            -e HOME=/workspace/.container-home \
+            -e DOTNET_CLI_HOME=/workspace/.container-home \
+            -e DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 \
             -v "$PWD:/workspace" \
             -w /workspace \
             abaer1902/avalonia-build:latest \
