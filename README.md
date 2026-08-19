@@ -15,7 +15,7 @@ The following Github Actions are sourced at `./github/workflows/`
 | Publish Build Image    | Create the .NET sdk build image for the application and publish it to docker called `avalonia-build:latest` |
 
 ### Simplified Project Overview
-<img width="2700" height="1300" alt="CI_CD Demo Diagram" src="https://github.com/user-attachments/assets/41217ed9-c42e-4fc3-b877-a99537d5f066" />
+<img width="2750" height="1300" alt="CI_CD Demo Diagram" src="https://github.com/user-attachments/assets/41217ed9-c42e-4fc3-b877-a99537d5f066" />
 
 ### Growth Overview
 The Full CI/CD pipeline design is meant to establish 4 main points of validation:
@@ -23,7 +23,7 @@ The Full CI/CD pipeline design is meant to establish 4 main points of validation
 2. Build- The setup and install of the environment and dependencies for the app
 3. Test- Any validation that must occur at runtime (ex. Leak tests, UI validation... etc)
 4. Release- The process at which delivering the product to customers is automated or protected
-<img width="2700" height="1300" alt="CI_CD Diagram" src="https://github.com/user-attachments/assets/7ebb4104-6995-4e50-8cd5-cc1f5f8aad78" />
+<img width="2750" height="1300" alt="CI_CD Diagram" src="https://github.com/user-attachments/assets/7ebb4104-6995-4e50-8cd5-cc1f5f8aad78" />
 
 ### Application Overview
 This application labeled *AvaloniaApplication1* is the application that is tested throughout this CI/CD example. It is an extremely basic example of an Avalonia app with 3 features.
