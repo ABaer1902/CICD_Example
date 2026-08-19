@@ -33,6 +33,7 @@ jobs:
       - name: Run unit tests in Docker
         run: |
           docker run --rm \
+            --user "$(id -u):$(id -g)" \
             -v "$PWD:/workspace" \
             -w /workspace \
             abaer1902/avalonia-build:latest \

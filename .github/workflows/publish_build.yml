@@ -56,16 +56,3 @@ jobs:
         run: |
           docker push abaer1902/avalonia-build:latest
 
-
-
-      - name: Check workspace ownership
-        if: ${{ always() }}
-        shell: bash
-        run: |
-          echo "Runner identity:"
-          id
-
-          echo "Generated .NET directories:"
-          find "$GITHUB_WORKSPACE" \
-            \( -path "*/bin" -o -path "*/bin/Release" -o -path "*/obj" \) \
-            -exec ls -ld {} \; 2>/dev/null || true
