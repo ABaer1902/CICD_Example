@@ -142,8 +142,5 @@ jobs:
 
           echo "=== Docker usage after cleanup ==="
           docker system df || true
-          
-          echo "=== VM's Current Storage ==="
-	        df -h
       
 
